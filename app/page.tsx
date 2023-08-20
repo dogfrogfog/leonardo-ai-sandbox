@@ -59,7 +59,7 @@ export default function Home() {
   return (
     <section>
       <PromptForm />
-      <div className="flex flex-col flex-wrap sm:flex-row gap-4 md:gap-8">
+      <div className="flex flex-col flex-wrap justify-center sm:flex-row gap-4 md:gap-8">
         {generated_images.map((v) => (
           <div className="w-full md:w-[45%] flex justify-center" key={v.id}>
             <Image

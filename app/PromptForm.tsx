@@ -2,12 +2,12 @@
 
 export default function PromptForm() {
   return (
-    <div className="flex gap-4 mb-24">
+    <div className="flex flex-col md:flex-row gap-4 mb-16">
       <textarea
         placeholder="An oil painting of a cat"
-        className="p-2 w-1/2 h-[100px]"
+        className="p-2 w-full md:w-1/2 h-[100px] rounded"
       ></textarea>
-      <div className="w-1/2">
+      <div className="w-full md:w-1/2">
         <button className="transition-all w-full mb-4 p-2 rounded bg-slate-300 font-semibold hover:scale-105">
           clear
         </button>

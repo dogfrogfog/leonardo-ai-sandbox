@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 function Header() {
   return (
-    <div className="z-10 mb-8 w-full items-center justify-between font-mono text-sm lg:flex">
-      <p className="text-2xl mb-6">
+    <div className="z-10 mb-16 w-full items-center justify-between font-mono text-sm lg:flex">
+      <p className="text-2xl">
         <Link href="/">Leonardo.ai sandbox</Link>
       </p>
       <div className="text-3xl flex h-24 bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">

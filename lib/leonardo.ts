@@ -12,7 +12,7 @@ const sdk = new Leonardo({
 
 export async function createGeneration(
   prompt: string,
-  modelId = "6bef9f1b-29cb-40c7-b9df-32b51c1f67d3",
+  modelId: string,
   width = 512,
   height = 512
 ): Promise<CreateGeneration200ApplicationJSONSDGenerationOutput | null> {

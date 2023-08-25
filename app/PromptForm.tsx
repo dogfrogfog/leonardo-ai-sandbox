@@ -3,7 +3,7 @@ import { ChangeEvent, useState, useContext } from "react";
 import { GenerationContext } from "./GenerationContext";
 
 type Props = {
-  createGeneration: (prompt: string) => Promise<any>;
+  createGeneration: (prompt: string, model: string) => Promise<any>;
   getGeneration: (generationId: string) => Promise<any>;
 };
 
@@ -11,8 +11,15 @@ let RETRIES_COUNT = 0;
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 7000;
 
+const MODELS = {
+  "Leonardo Creative": "6bef9f1b-29cb-40c7-b9df-32b51c1f67d3",
+  "Leonardo Select": "cd2b2a15-9760-4174-a5ff-4d2925057376",
+  "Leonardo Signature": "291be633-cb24-434f-898f-e662799936ad",
+};
+
 export default function PromptForm({ createGeneration, getGeneration }: Props) {
   const [prompt, setPrompt] = useState("");
+  const [model, setModel] = useState(MODELS["Leonardo Creative"]);
   const { isLoading, setGeneration, setIsLoading } =
     useContext(GenerationContext);
 
@@ -43,6 +50,10 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
   const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setPrompt(e.target.value);
 
+  const handleModelChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setModel(e.target.value);
+  };
+
   const handleClearClick = () => {
     setPrompt("");
   };
@@ -51,7 +62,7 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
     setIsLoading(true);
 
     try {
-      const data = await createGeneration(prompt);
+      const data = await createGeneration(prompt, model);
 
       if (data) checkStatusAndRetry(data.generationId);
     } catch (e) {
@@ -61,13 +72,26 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
 
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-16">
-      <textarea
-        value={prompt}
-        onChange={handlePromptChange}
-        placeholder="An oil painting of a cat"
-        className="p-2 w-full md:w-1/2 h-[100px] rounded disabled:cursor-not-allowed disabled:bg-amber-100"
-        disabled={isLoading}
-      ></textarea>
+      <div className="w-full md:w-1/2">
+        <textarea
+          value={prompt}
+          onChange={handlePromptChange}
+          placeholder="An oil painting of a cat"
+          className="p-2 w-full h-[100px] rounded disabled:cursor-not-allowed disabled:bg-amber-100"
+          disabled={isLoading}
+        ></textarea>
+        <select
+          onChange={handleModelChange}
+          disabled={isLoading}
+          className="transition-all w-full mb-4 p-2 rounded bg-slate-100 font-semibold disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {Object.entries(MODELS).map(([key, value]) => (
+            <option key={value} value={value}>
+              {key}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="w-full md:w-1/2">
         <button
           onClick={handleClearClick}

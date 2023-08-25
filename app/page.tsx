@@ -4,10 +4,10 @@ import { createGeneration, getGeneration } from "@/lib/leonardo";
 
 import ImagesGalery from "./ImagesGalery";
 
-async function createGenerationAndSaveToRedis(prompt: string) {
+async function createGenerationAndSaveToRedis(prompt: string, model: string) {
   "use server";
   try {
-    const data = await createGeneration(prompt);
+    const data = await createGeneration(prompt, model);
 
     if (data) {
       await redis.set(data.generationId as string, JSON.stringify(data));

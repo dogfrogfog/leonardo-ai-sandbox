@@ -10,7 +10,7 @@ export default function ImagesGalery() {
     <div className="flex flex-col flex-wrap justify-center sm:flex-row gap-4 md:gap-8">
       {isLoading ? (
         <p className="text-xl mb-4 font-semibold">
-          Generating images for 10 seconds...
+          Generating images ... please wait
         </p>
       ) : (
         generation?.generatedImages?.map((v: any) => (

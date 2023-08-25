@@ -1,4 +1,8 @@
 import { Leonardo } from "@leonardo-ai/sdk";
+import {
+  GetGenerationById200ApplicationJSONGenerations,
+  CreateGeneration200ApplicationJSONSDGenerationOutput,
+} from "@leonardo-ai/sdk/dist/sdk/models/operations";
 
 const sdk = new Leonardo({
   security: {
@@ -6,34 +10,48 @@ const sdk = new Leonardo({
   },
 });
 
-export async function getGenerationByPrompt(prompt: string): Promise<any> {
+export async function createGeneration(
+  prompt: string,
+  modelId = "6bef9f1b-29cb-40c7-b9df-32b51c1f67d3",
+  width = 512,
+  height = 512
+): Promise<CreateGeneration200ApplicationJSONSDGenerationOutput | null> {
   try {
     const generationResponse = await sdk.generation.createGeneration({
       prompt,
-      modelId: "6bef9f1b-29cb-40c7-b9df-32b51c1f67d3",
-      width: 512,
-      height: 512,
+      modelId,
+      width,
+      height,
     });
 
     const generationId =
       generationResponse.createGeneration200ApplicationJSONObject
-        ?.sdGenerationJob?.generationId || null;
+        ?.sdGenerationJob || null;
 
-    if (generationId) {
-      return await new Promise(function (resolve, reject) {
-        setTimeout(async () => {
-          const generationImagesResponse =
-            await sdk.generation.getGenerationById(generationId);
-
-          const generation =
-            generationImagesResponse.getGenerationById200ApplicationJSONObject
-              ?.generationsByPk;
-
-          resolve(generation);
-        }, 10000);
-      });
-    }
+    return generationId;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
+
+  return null;
+}
+
+export async function getGeneration(
+  generationId: string
+): Promise<GetGenerationById200ApplicationJSONGenerations | null> {
+  try {
+    const generationImagesResponse = await sdk.generation.getGenerationById(
+      generationId
+    );
+
+    const generation =
+      generationImagesResponse.getGenerationById200ApplicationJSONObject
+        ?.generationsByPk || null;
+
+    return generation;
+  } catch (e) {
+    console.error(e);
+  }
+
+  return null;
 }

@@ -3,13 +3,42 @@ import { ChangeEvent, useState, useContext } from "react";
 import { GenerationContext } from "./GenerationContext";
 
 type Props = {
-  generateImages: (prompt: string) => Promise<any>;
+  createGeneration: (prompt: string) => Promise<any>;
+  getGeneration: (generationId: string) => Promise<any>;
 };
 
-export default function PromptForm({ generateImages }: Props) {
+let RETRIES_COUNT = 0;
+const MAX_RETRIES = 5;
+const RETRY_DELAY = 7000;
+
+export default function PromptForm({ createGeneration, getGeneration }: Props) {
   const [prompt, setPrompt] = useState("");
   const { isLoading, setGeneration, setIsLoading } =
     useContext(GenerationContext);
+
+  async function checkStatusAndRetry(generationId: string) {
+    console.log("generationId: ", generationId);
+    if (RETRIES_COUNT < MAX_RETRIES) {
+      const result = await getGeneration(generationId);
+
+      if (result.status === "COMPLETE") {
+        console.log("Status is COMPLETE:", result);
+        setGeneration(result);
+        RETRIES_COUNT = 0;
+        setIsLoading(false);
+      } else {
+        console.log("Status is PENDING:", result);
+        setTimeout(() => checkStatusAndRetry(generationId), RETRY_DELAY);
+
+        RETRIES_COUNT++;
+      }
+    } else {
+      console.log("RETRIES_COUNT reached");
+
+      RETRIES_COUNT = 0;
+      setIsLoading(false);
+    }
+  }
 
   const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setPrompt(e.target.value);
@@ -22,12 +51,11 @@ export default function PromptForm({ generateImages }: Props) {
     setIsLoading(true);
 
     try {
-      const data = await generateImages(prompt);
-      setGeneration(data);
+      const data = await createGeneration(prompt);
+
+      if (data) checkStatusAndRetry(data.generationId);
     } catch (e) {
       console.error(e);
-    } finally {
-      setIsLoading(false);
     }
   };
 

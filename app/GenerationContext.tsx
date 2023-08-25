@@ -13,7 +13,7 @@ export const GenerationProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <GenerationContext.Provider
-      value={{ generation, isLoading, setGeneration, setIsLoading }}
+      value={{ generation, setGeneration, isLoading, setIsLoading }}
     >
       {children}
     </GenerationContext.Provider>

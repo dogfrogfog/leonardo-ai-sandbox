@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@leonardo-ai/sdk": "^1.51.0",
+    "@tanstack/react-query": "^4.33.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
@@ -24,6 +25,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.32.5",
     "@types/node": "20.5.1"
   }
 }

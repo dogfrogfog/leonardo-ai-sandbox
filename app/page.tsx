@@ -26,7 +26,7 @@ async function getGenerationAndUpdateRedis(generationId: string) {
   try {
     const data = await getGeneration(generationId);
 
-    if (data && data.status === "COMPLETE") {
+    if (data) {
       await redis.set(data.id as string, JSON.stringify(data));
 
       return data;

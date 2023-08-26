@@ -37,14 +37,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={
-          inter.className +
-          " min-h-screen container mx-auto p-4 md:p-12 lg:p-24"
-        }
-      >
-        <Header />
-        {children}
+      <body className={inter.className}>
+        <div className="container py-24">
+          <Header />
+          {children}
+        </div>
       </body>
     </html>
   );

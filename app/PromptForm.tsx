@@ -1,6 +1,18 @@
 "use client";
 import { ChangeEvent, useState, useContext } from "react";
 import { GenerationContext } from "./GenerationContext";
+import { Button } from "@/components/ui/button";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
   createGeneration: (prompt: string, model: string) => Promise<any>;
@@ -49,11 +61,12 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
     }
   }
 
-  const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
+  const handlePromptChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value);
+  };
 
-  const handleModelChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setModel(e.target.value);
+  const handleModelChange = (value: string) => {
+    setModel(value);
   };
 
   const handleClearClick = () => {
@@ -62,10 +75,8 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
 
   const handleGenerateClick = async () => {
     setIsLoading(true);
-
     try {
       const data = await createGeneration(prompt, model);
-
       if (data) checkStatusAndRetry(data.generationId);
     } catch (e) {
       console.error(e);
@@ -73,46 +84,47 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-16">
-      <div className="w-full md:w-1/2">
-        <textarea
+    <div className="flex flex-col md:flex-row gap-8 mb-16">
+      <div className="w-full md:w-4/5">
+        <Textarea
           value={prompt}
           onChange={handlePromptChange}
           placeholder="An oil painting of a cat"
-          className="p-2 w-full h-[100px] rounded disabled:cursor-not-allowed disabled:bg-amber-100"
+          className="mb-4 w-full h-[100px] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isLoading}
-        ></textarea>
-        <label>
-          model:
-          {/* todo: cloud tags style select */}
-          <select
-            onChange={handleModelChange}
-            disabled={isLoading}
-            className="transition-all w-full mb-4 p-2 rounded bg-slate-100 font-semibold disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {Object.entries(MODELS).map(([key, value]) => (
-              <option key={value} value={value}>
-                {key}
-              </option>
-            ))}
-          </select>
-        </label>
+        />
+        <Select onValueChange={handleModelChange}>
+          <SelectTrigger className="w-full md:w-[300px]">
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Models</SelectLabel>
+              {Object.entries(MODELS).map(([key, value]) => (
+                <SelectItem key={value} value={value}>
+                  {key}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
-      <div className="w-full md:w-1/2">
-        <button
+      <div className="w-full flex flex-col gap-4 md:w-1/5">
+        <Button
+          className="w-full"
           onClick={handleClearClick}
           disabled={isLoading}
-          className="transition-all w-full mb-4 p-2 rounded bg-slate-300 font-semibold hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed disabled:opacity-70"
+          variant="outline"
         >
           clear
-        </button>
-        <button
+        </Button>
+        <Button
+          className="w-full"
           disabled={isLoading}
           onClick={handleGenerateClick}
-          className="disabled:scale-100 disabled:cursor-not-allowed disabled:opacity-70 transition-all w-full p-2 rounded bg-black bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:scale-105 font-semibold text-white"
         >
           generate
-        </button>
+        </Button>
       </div>
     </div>
   );

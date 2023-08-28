@@ -71,6 +71,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-slate-50 text-foreground;
+    @apply bg-gradient-to-tl from-slate-500 to-yellow-100 text-foreground min-h-screen;
   }
 }

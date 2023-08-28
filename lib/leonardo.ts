@@ -1,8 +1,10 @@
+import { formSchema } from "@/components/PromptForm/schema";
 import { Leonardo } from "@leonardo-ai/sdk";
 import {
   GetGenerationById200ApplicationJSONGenerations,
   CreateGeneration200ApplicationJSONSDGenerationOutput,
 } from "@leonardo-ai/sdk/dist/sdk/models/operations";
+import * as z from "zod";
 
 const sdk = new Leonardo({
   security: {
@@ -11,18 +13,10 @@ const sdk = new Leonardo({
 });
 
 export async function createGeneration(
-  prompt: string,
-  modelId: string,
-  width = 512,
-  height = 512
+  params: z.infer<typeof formSchema>
 ): Promise<CreateGeneration200ApplicationJSONSDGenerationOutput | null> {
   try {
-    const generationResponse = await sdk.generation.createGeneration({
-      prompt,
-      modelId,
-      width,
-      height,
-    });
+    const generationResponse = await sdk.generation.createGeneration(params);
 
     const generationId =
       generationResponse.createGeneration200ApplicationJSONObject

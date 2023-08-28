@@ -12,20 +12,22 @@ export const metadata: Metadata = {
 
 function Header() {
   return (
-    <div className="z-10 mb-16 w-full items-center justify-between font-mono text-sm lg:flex">
-      <p className="text-2xl">
-        <Link href="/">Leonardo.ai sandbox</Link>
+    <div className="mb-16 w-full flex items-center justify-between border-b-2 border-black pb-4">
+      <p className="text-2xl font-semibold">
+        <Link href="/" className="hover:underline mr-8">
+          home
+        </Link>
+        <Link href="/gallery" className="hover:underline">
+          gallery
+        </Link>
       </p>
-      <div className="text-3xl flex h-24 bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-        <a
-          className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-          href="https://github.com/dogfrogfog"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          by <span className="hover:underline font-bold">@dogfrogfog</span>
-        </a>
-      </div>
+      <a
+        href="https://github.com/dogfrogfog"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        by <span className="hover:underline font-bold">@dogfrogfog</span>
+      </a>
     </div>
   );
 }
@@ -38,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="container py-24">
+        <div className="container py-16">
           <Header />
           {children}
         </div>

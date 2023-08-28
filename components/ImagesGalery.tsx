@@ -1,10 +1,9 @@
 "use client";
 import Image from "next/image";
-import { useContext } from "react";
-import { GenerationContext } from "./GenerationContext";
+import { useGenerationContext } from "@/components/GenerationContext";
 
 export default function ImagesGalery() {
-  const { generation, isLoading } = useContext(GenerationContext);
+  const { generation, isLoading } = useGenerationContext();
 
   return (
     <div className="flex flex-col justify-center  gap-4 overflow-hidden md:flex-row md:flex-wrap">

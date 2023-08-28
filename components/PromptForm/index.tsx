@@ -1,11 +1,10 @@
 "use client";
-import { useContext } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { MODELS_MAP, MAX_RETRIES, RETRY_DELAY } from "@/consts";
+import { useGenerationContext } from "@/components/GenerationContext";
 
-import { GenerationContext } from "@/components/GenerationContext";
 import {
   Select,
   SelectContent,
@@ -38,8 +37,7 @@ type Props = {
 };
 
 export default function PromptForm({ createGeneration, getGeneration }: Props) {
-  const { isLoading, setGeneration, setIsLoading } =
-    useContext(GenerationContext);
+  const { isLoading, setGeneration, setIsLoading } = useGenerationContext();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema as any),
@@ -230,7 +228,7 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
           className="w-full"
           onClick={() => form.reset()}
         >
-          Reset
+          Reset to default
         </Button>
       </form>
     </Form>

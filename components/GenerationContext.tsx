@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useContext } from "react";
 
 export const GenerationContext = createContext({
   generation: null,
@@ -19,3 +19,5 @@ export const GenerationProvider = ({ children }: { children: ReactNode }) => {
     </GenerationContext.Provider>
   );
 };
+
+export const useGenerationContext = () => useContext(GenerationContext);

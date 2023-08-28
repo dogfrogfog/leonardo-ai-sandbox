@@ -15,10 +15,11 @@ function Header() {
 		<div className="mb-16 w-full flex items-center justify-between border-b-2 border-black pb-4">
 			<p className="text-2xl font-semibold">
 				<Link href="/" className="hover:underline mr-8">
-					home
+					Home
 				</Link>
-				<Link href="/gallery" className="hover:underline">
-					gallery
+				<Link href="/gallery" className="pointer-events-none opacity-70">
+					Gallery{' '}
+					<span className="text-sm">(coming soon)</span>
 				</Link>
 			</p>
 			<a

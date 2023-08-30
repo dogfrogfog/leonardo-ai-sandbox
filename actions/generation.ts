@@ -4,39 +4,41 @@ import { redis } from "@/lib/redis";
 import * as z from "zod";
 
 export async function createGenerationAndSaveToRedis(
-	params: z.infer<typeof formSchema>,
+  params: z.infer<typeof formSchema>
 ) {
-	"use server";
-	try {
-		const data = await createGeneration(params);
+  "use server";
+  try {
+    const data = await createGeneration(params);
 
-		if (data) {
-			await redis.set(data.generationId as string, JSON.stringify(data));
+    if (data) {
+      await redis.set(data.generationId as string, JSON.stringify(data));
 
-			return data;
-		}
-	} catch (e) {
-		console.error(e);
-	}
+      return data;
+    }
+  } catch (e) {
+    console.error(e);
+  }
 
-	return null;
+  return null;
 }
 
 export async function getGenerationAndUpdateRedis(generationId: string) {
-	"use server";
-	try {
-		const data = await getGeneration(generationId);
+  "use server";
+  try {
+    const data = await getGeneration(generationId);
 
-		if (data) {
-			await redis.set(data.id as string, JSON.stringify(data));
+    if (data) {
+      await redis.set(data.id as string, JSON.stringify(data));
 
-			return data;
-		}
+      return data;
+    }
+    console.log("data that is returning to the client");
+    console.log(data);
 
-		return data;
-	} catch (e) {
-		console.error(e);
-	}
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
 
-	return null;
+  return null;
 }

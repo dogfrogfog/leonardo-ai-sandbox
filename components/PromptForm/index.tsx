@@ -78,6 +78,7 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setGeneration(null);
     setIsLoading(true);
     try {
       const data = await createGeneration(values);

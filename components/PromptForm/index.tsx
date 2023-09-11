@@ -68,6 +68,7 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
         setTimeout(() => checkStatusAndRetry(generationId), RETRY_DELAY);
 
         RETRIES_COUNT++;
+        console.log("⏰ RETRIES_COUNT:", RETRIES_COUNT)
       }
     } else {
       console.log("RETRIES_COUNT reached");
@@ -227,7 +228,7 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
           render={({ field }) => (
             <FormItem>
               <div className="flex gap-4 items-center">
-                <FormLabel>Use Prompt Magic</FormLabel>
+                <FormLabel>Magic & Alchemy</FormLabel>
                 <FormControl>
                   <Checkbox
                     id="promptMagic"

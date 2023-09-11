@@ -5,6 +5,7 @@ import {
   GetGenerationById200ApplicationJSONGenerations,
 } from "@leonardo-ai/sdk/dist/sdk/models/operations";
 import * as z from "zod";
+import { processParams } from "./model";
 
 const sdk = new Leonardo({
   security: {
@@ -16,7 +17,7 @@ export async function createGeneration(
   params: z.infer<typeof formSchema>
 ): Promise<CreateGeneration200ApplicationJSONSDGenerationOutput | null> {
   try {
-    const generationResponse = await sdk.generation.createGeneration(params);
+    const generationResponse = await sdk.generation.createGeneration(processParams(params));
 
     const generationId =
       generationResponse.createGeneration200ApplicationJSONObject

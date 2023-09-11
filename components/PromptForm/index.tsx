@@ -1,11 +1,11 @@
-"use client";
-import { useGenerationContext } from "@/components/GenerationContext";
-import { MAX_RETRIES, MODELS_MAP, RETRY_DELAY } from "@/consts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+'use client';
+import { useGenerationContext } from '@/components/GenerationContext';
+import { MAX_RETRIES, MODELS_MAP, RETRY_DELAY } from '@/consts';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,9 +14,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -25,10 +25,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
-import { formSchema } from "./schema";
+import { formSchema } from './schema';
 
 let RETRIES_COUNT = 0;
 
@@ -43,35 +43,35 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema as any),
     defaultValues: {
-      prompt: "",
-      modelId: MODELS_MAP["3D Animation Style"],
+      prompt: '',
+      modelId: MODELS_MAP['3D Animation Style'],
       guidanceScale: 7,
       height: 512,
       width: 512,
-      negativePrompt: "",
+      negativePrompt: '',
       promptMagic: false,
     },
   });
 
   async function checkStatusAndRetry(generationId: string) {
-    console.log("generationId: ", generationId);
+    console.log('generationId: ', generationId);
     if (RETRIES_COUNT < MAX_RETRIES) {
       const result = await getGeneration(generationId);
 
-      if (result.status === "COMPLETE") {
-        console.log("Status is COMPLETE:", result);
+      if (result.status === 'COMPLETE') {
+        console.log('Status is COMPLETE:', result);
         setGeneration(result);
         RETRIES_COUNT = 0;
         setIsLoading(false);
       } else {
-        console.log("Status is PENDING:", result);
+        console.log('Status is PENDING:', result);
         setTimeout(() => checkStatusAndRetry(generationId), RETRY_DELAY);
 
         RETRIES_COUNT++;
-        console.log("⏰ RETRIES_COUNT:", RETRIES_COUNT)
+        console.log('⏰ RETRIES_COUNT:', RETRIES_COUNT);
       }
     } else {
-      console.log("RETRIES_COUNT reached");
+      console.log('RETRIES_COUNT reached');
 
       RETRIES_COUNT = 0;
       setIsLoading(false);
@@ -83,9 +83,13 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
     setIsLoading(true);
     try {
       const data = await createGeneration(values);
-      if (data) checkStatusAndRetry(data.generationId);
+      if (data) {
+        checkStatusAndRetry(data.generationId);
+      } else throw new Error('no data');
     } catch (e) {
-      console.error(e);
+      setIsLoading(false);
+      setGeneration(null);
+      console.error('bad generation');
     }
   }
 

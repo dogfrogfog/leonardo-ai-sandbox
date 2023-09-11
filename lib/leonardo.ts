@@ -18,6 +18,11 @@ export async function createGeneration(
 ): Promise<CreateGeneration200ApplicationJSONSDGenerationOutput | null> {
   try {
     const generationResponse = await sdk.generation.createGeneration(processParams(params));
+    console.log("🚀 ~ file: leonardo.ts:21 ~ generationResponse:", generationResponse)
+
+    if (generationResponse.statusCode === 400) {
+      throw new Error(generationResponse)
+    }
 
     const generationId =
       generationResponse.createGeneration200ApplicationJSONObject

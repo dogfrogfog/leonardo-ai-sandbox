@@ -71,10 +71,11 @@ export const processParams = (values) => {
   const params = { ...defaultValues, ...values };
 
   if (params.promptMagic) {
-    params.leonardoMagicVersion = 'v3';
+    params.promptMagic = true;
+    params.promptMagicVersion = 'v3';
     params.alchemy = true;
-    params.leonardoMagic = true;
+    params.contrastRatio = 0.5;
   }
 
-  return temp2;
+  return params;
 };

@@ -2,14 +2,22 @@
 import React from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import { getUserGenerations } from '@/lib/leonardo';
-import { GeneratedImage, Generation, GenerationStatus, Generations, UserID } from '@/lib/types';
+import {
+  GeneratedImage,
+  Generation,
+  GenerationStatus,
+  Generations,
+  UserID,
+} from '@/lib/types';
 import { getModelByID } from '@/lib/utils';
+import { useGenerationContext } from './GenerationContext';
 
 const useGenerations = () => {
   const { user } = useAuth();
   const [generations, setGenerations] = React.useState<Generations>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGenerating, seIsGenerating] = React.useState<boolean>(false);
+  const generation = useGenerationContext();
 
   const fetchGenerations = async (userId: UserID) => {
     setIsLoading(true);
@@ -31,7 +39,7 @@ const useGenerations = () => {
       return;
     }
     fetchGenerations(user.id);
-  }, [user?.id]);
+  }, [user?.id, generation.isLoading]);
 
   return {
     generations,
@@ -61,8 +69,11 @@ const GenerationImages = ({
   generatedImages,
   isGenerating,
 }: GenerationImagesProp) => {
+  const fakeId = React.useId();
   const cards = isGenerating
-    ? Array(4).fill({ id: 'noid', url: '' })
+    ? Array(4)
+        .fill({ id: fakeId, url: '' })
+        .map((obj, ind) => ({ ...obj, id: obj.id + ind }))
     : generatedImages;
   return (
     <div className="flex flex-row flex-wrap flex-1 justify-end gap-2">
@@ -128,7 +139,10 @@ const Gallery = () => {
       {generations.map((gen, ind) => {
         const isGen = isGenerating && ind === 0;
         return (
-          <div className="flex flex-col bg-gray-600 my-2 rounded-md overflow-hidden">
+          <div
+            key={gen.id}
+            className="flex flex-col bg-gray-600 my-2 rounded-md overflow-hidden"
+          >
             <div className="bg-gray-700 text-[8px] text-white mb-1 flex flex-row justify-start gap-2">
               <HeadTag name={getModelByID(gen.modelId)} />
               <HeadTag name="SEED" value={gen?.seed?.toString() || 'Pending'} />
@@ -137,6 +151,7 @@ const Gallery = () => {
                 name="Size"
                 value={`${gen.imageWidth} x ${gen.imageHeight}`}
               />
+              <HeadTag value={gen.status} />
             </div>
             <div className="flex flex-row mb-4 background p-2">
               <GenerationHeader {...gen} />

@@ -1,3 +1,4 @@
+'use client';
 import { formSchema } from '@/components/PromptForm/schema';
 import { Leonardo } from '@leonardo-ai/sdk';
 import {
@@ -102,7 +103,6 @@ export async function getUserGenerations({
       .then((response) => response.json())
       .catch((err) => console.error(err));
 
-    console.log('🚀 ~ file: leonardo.ts:116 ~ resp:', resp);
     if (!resp?.generations) {
       return [];
     }

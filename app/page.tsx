@@ -1,19 +1,20 @@
 import ImagesGalery from "@/components/ImagesGalery";
 
-import {
-  createGenerationAndSaveToRedis,
-  getGenerationAndUpdateRedis,
-} from "@/actions/generation";
+// import {
+//   createGenerationAndSaveToRedis,
+//   getGenerationAndUpdateRedis,
+// } from "@/actions/generation";
 import PromptForm from "@/components/PromptForm";
 import Gallery from "@/components/Gallery";
+import { createGeneration, getGeneration } from "@/lib/leonardo";
 
 export default function Home() {
   return (
     <section className="flex flex-grow flex-col md:flex-row gap-16 max-h-full">
       <div className="w-full md:w-1/4">
         <PromptForm
-          createGeneration={createGenerationAndSaveToRedis}
-          getGeneration={getGenerationAndUpdateRedis}
+          createGeneration={createGeneration}
+          getGeneration={getGeneration}
         />
       </div>
       <div className="w-full md:w-3/4 max-h-full flex-1">

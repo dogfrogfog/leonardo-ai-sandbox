@@ -54,7 +54,6 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
   });
 
   async function checkStatusAndRetry(generationId: string) {
-    console.log("generationId: ", generationId);
     if (RETRIES_COUNT < MAX_RETRIES) {
       const result = await getGeneration(generationId);
 

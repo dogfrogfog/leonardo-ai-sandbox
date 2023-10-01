@@ -53,9 +53,6 @@ export async function getGeneration(
   return null;
 }
 
-
-
-
 export async function getUser(): Promise<User> {
   const resp = await fetch('https://cloud.leonardo.ai/api/rest/v1/me', {
     method: 'GET',
@@ -84,30 +81,34 @@ type GetUserGenerationsProps = {
   limit?: number;
 };
 
-
-
-
-
 export async function getUserGenerations({
   userId,
   offset = 0,
   limit = 16,
 }: GetUserGenerationsProps): Promise<Generations> {
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      authorization: `Bearer ${authToken}`,
-    },
-  };
+  try {
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        authorization: `Bearer ${authToken}`,
+      },
+    };
 
-  const resp = await fetch(
-    `https://cloud.leonardo.ai/api/rest/v1/generations/user/${userId}?offset=${offset}&limit=${limit}`,
-    options,
-  )
-    .then((response) => response.json())
-    .catch((err) => console.error(err));
+    const resp: { generations: Generations } = await fetch(
+      `https://cloud.leonardo.ai/api/rest/v1/generations/user/${userId}?offset=${offset}&limit=${limit}`,
+      options,
+    )
+      .then((response) => response.json())
+      .catch((err) => console.error(err));
 
-  console.log('🚀 ~ file: leonardo.ts:116 ~ resp:', resp);
-  return resp;
+    console.log('🚀 ~ file: leonardo.ts:116 ~ resp:', resp);
+    if (!resp?.generations) {
+      return [];
+    }
+    return resp.generations;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
 }

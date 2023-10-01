@@ -44,12 +44,14 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body className={inter.className}>
-          <div className="container px-8 relative">
-            <UserDetails />
-          </div>
-          <div className="container py-10 relative">
-            <Header />
-            {children}
+          <div className="max-h-screen flex flex-col m-0 justify-start">
+            <div className="container px-8 relative flex-none w-full">
+              <UserDetails />
+            </div>
+            <div className="container py-10 relative flex-1 h-10 overflow-y-auto w-full flex flex-col justify-start">
+              <Header />
+              {children}
+            </div>
           </div>
         </body>
       </html>

@@ -5,6 +5,7 @@ export type GenerationID = string;
 export type ModelID = string;
 export enum GenerationStatus {
   COMPLETE = 'COMPLETE',
+  PENDING = 'PENDING'
 }
 
 export type GeneratedImage = {
@@ -34,7 +35,7 @@ export type Generation = {
   generated_images: Array<GeneratedImage>;
 };
 
-export type Generations = { generations: Array<Generation> };
+export type Generations = Array<Generation>;
 
 export type User = {
   name: string;

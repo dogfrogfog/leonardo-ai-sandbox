@@ -192,7 +192,7 @@ const HeadTag = ({ name, value }: { name?: string; value?: string }) => {
 
 const Gallery = () => {
   const { generations, isLoading, isGenerating } = useGenerations();
-  const [popupSrc, setPopupSrc] = React.useState('sdf');
+  const [popupSrc, setPopupSrc] = React.useState('');
 
   const closePopup = () => {
     setPopupSrc('');

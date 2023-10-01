@@ -17,9 +17,9 @@ function Header() {
 				<Link href="/" className="hover:underline mr-8">
 					Home
 				</Link>
-				<Link href="/gallery" className="pointer-events-none opacity-70">
+				<Link href="/gallery" className="hover:underline mr-8">
 					Gallery{' '}
-					<span className="text-sm">(coming soon)</span>
+					{/* <span className="text-sm">(coming soon)</span> */}
 				</Link>
 			</p>
 			<a

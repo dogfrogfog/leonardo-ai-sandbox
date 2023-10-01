@@ -1,5 +1,6 @@
 'use client';
-import { User, getUser } from '@/lib/leonardo';
+import { getUser } from '@/lib/leonardo';
+import { User } from '@/lib/types';
 import React from 'react';
 
 type Auth = {

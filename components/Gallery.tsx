@@ -61,13 +61,72 @@ const GenerationHeader = ({ prompt }: Omit<Generation, 'generated_images'>) => {
   );
 };
 
+type ImageModalType = {
+  src: string;
+  onClose: () => void;
+};
+
+const ImageModal = ({ src, onClose }: ImageModalType) => {
+  return (
+    <div
+      id="extralarge-modal"
+      tabIndex={-1}
+      className={`fixed top-0 left-0 right-0 h-[95vh] z-50 ${
+        !src ? 'hidden' : ''
+      } w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
+    >
+      <div className="relative w-full max-w-7xl max-h-full">
+        <div className="relative bg-gray-900 rounded-lg shadow dark:bg-gray-700">
+          <div className="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+            <h3 className="text-xl font-medium  text-white">Image Preview</h3>
+            <button
+              onClick={onClose}
+              type="button"
+              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="extralarge-modal"
+            >
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+              <span className="sr-only">Close modal</span>
+            </button>
+          </div>
+          <div className="p-1 space-y-6 max-h-[70%]">
+            <img
+              src={src}
+              alt="generation"
+              loading="eager"
+              className="object-contain max-w-[80vw] max-h-[80vh] m-auto"
+            />
+          </div>
+          <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 type GenerationImagesProp = {
   generatedImages: Array<GeneratedImage>;
   isGenerating: boolean;
+  onImageClick: (src: string) => () => void;
 };
 const GenerationImages = ({
   generatedImages,
   isGenerating,
+  onImageClick,
 }: GenerationImagesProp) => {
   const fakeId = React.useId();
   const cards = isGenerating
@@ -84,11 +143,14 @@ const GenerationImages = ({
             key={img.id}
           >
             {img.url ? (
-              <img
-                src={img.url}
-                className="object-contain h-full "
-                loading="lazy"
-              />
+              <div>
+                <img
+                  src={img.url}
+                  className="object-contain h-full "
+                  loading="lazy"
+                  onClick={onImageClick(img.url)}
+                />
+              </div>
             ) : (
               <div className="w-[200px] h-[160px] max-w-[98%] bg-gray-800 flex justify-center items-center text-gray-50  text-sm">
                 <div role="status">
@@ -130,12 +192,22 @@ const HeadTag = ({ name, value }: { name?: string; value?: string }) => {
 
 const Gallery = () => {
   const { generations, isLoading, isGenerating } = useGenerations();
+  const [popupSrc, setPopupSrc] = React.useState('sdf');
+
+  const closePopup = () => {
+    setPopupSrc('');
+  };
+
+  const openPopup = (src: string) => () => {
+    setPopupSrc(src);
+  };
 
   if (isLoading) {
     return <div>Loading generations...</div>;
   }
   return (
     <div className="flex flex-col max-h-full">
+      <ImageModal src={popupSrc} onClose={closePopup} />
       {generations.map((gen, ind) => {
         const isGen = isGenerating && ind === 0;
         return (
@@ -158,6 +230,7 @@ const Gallery = () => {
               <GenerationImages
                 generatedImages={gen.generated_images}
                 isGenerating={isGen}
+                onImageClick={openPopup}
               />
             </div>
           </div>

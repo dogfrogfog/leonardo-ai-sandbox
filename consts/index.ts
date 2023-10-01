@@ -14,4 +14,13 @@ export const MODELS_MAP = {
   'Dream Shaper V5': 'd2fb9cf9-7999-4ae5-8bfe-f0df2d32abf8',
   'Leonardo Diffusion': 'b820ea11-02bf-4652-97ae-9ac0cc00593d',
   'Absolute Reality 1.6': 'e316348f-7773-490e-adcd-46757c738eb7',
+  'Leonardo Photo Real': 'b75a5b32-ca22-4b1d-bb0a-883c26783c71'
 };
+
+export const PRESET_STYLES = {
+  NONE: 'NONE',
+  LEONARDO: 'LEONARDO',
+  CINEMATIC: 'CINEMATIC',
+  CREATIVE: 'CREATIVE',
+  VIBRANT: 'VIBRANT'
+}

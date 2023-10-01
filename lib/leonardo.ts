@@ -20,6 +20,11 @@ export async function createGeneration(
   params: z.infer<typeof formSchema>,
 ): Promise<CreateGeneration200ApplicationJSONSDGenerationOutput | null> {
   try {
+    if (params.photoReal) {
+      params.modelId = undefined;
+    }
+
+
     const generationResponse = await sdk.generation.createGeneration(params);
 
     const generationId =

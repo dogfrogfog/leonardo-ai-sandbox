@@ -1,10 +1,11 @@
-import ImagesGalery from "@/components/ImagesGalery";
+// import ImagesGalery from "@/components/ImagesGalery";
 import PromptForm from "@/components/PromptForm";
 
 import {
   createGenerationAndSaveToRedis,
   getGenerationAndUpdateRedis,
 } from "@/actions/generation";
+import Gallery from "@/components/Gallery";
 
 export default function Home() {
   return (
@@ -19,7 +20,7 @@ export default function Home() {
         <h2 className="text-2xl font-semibold text-center mb-4">
           Generated images
         </h2>
-        <ImagesGalery />
+        <Gallery />
       </div>
     </section>
   );

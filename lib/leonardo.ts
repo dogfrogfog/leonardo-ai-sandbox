@@ -5,10 +5,13 @@ import {
   GetGenerationById200ApplicationJSONGenerations,
 } from '@leonardo-ai/sdk/dist/sdk/models/operations';
 import * as z from 'zod';
+import { Generations, User, UserID } from './types';
+
+const authToken = process.env.NEXT_PUBLIC_LEONARDO_API_KEY;
 
 const sdk = new Leonardo({
   security: {
-    bearerAuth: process.env.LEONARDO_API_KEY as string,
+    bearerAuth: authToken as string,
   },
 });
 
@@ -50,22 +53,15 @@ export async function getGeneration(
   return null;
 }
 
-export type User = {
-  name: string;
-  id: string;
-  tokenRenewalDate: string;
-  subscriptionTokens: number;
-  subscriptionGptTokens: number;
-  subscriptionModelTokens: number;
-  apiCredit: number;
-};
 
-export async function getUser() {
+
+
+export async function getUser(): Promise<User> {
   const resp = await fetch('https://cloud.leonardo.ai/api/rest/v1/me', {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      authorization: 'Bearer e3c8193c-5599-4156-af36-af8ded0c5597',
+      authorization: `Bearer ${authToken}`,
     },
   }).then((response) => response.json());
 
@@ -80,4 +76,38 @@ export async function getUser() {
     subscriptionModelTokens: userObj.subscriptionModelTokens,
     apiCredit: userObj.apiCredit / 100_000,
   };
+}
+
+type GetUserGenerationsProps = {
+  userId: UserID;
+  offset?: number;
+  limit?: number;
+};
+
+
+
+
+
+export async function getUserGenerations({
+  userId,
+  offset = 0,
+  limit = 16,
+}: GetUserGenerationsProps): Promise<Generations> {
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      authorization: `Bearer ${authToken}`,
+    },
+  };
+
+  const resp = await fetch(
+    `https://cloud.leonardo.ai/api/rest/v1/generations/user/${userId}?offset=${offset}&limit=${limit}`,
+    options,
+  )
+    .then((response) => response.json())
+    .catch((err) => console.error(err));
+
+  console.log('🚀 ~ file: leonardo.ts:116 ~ resp:', resp);
+  return resp;
 }

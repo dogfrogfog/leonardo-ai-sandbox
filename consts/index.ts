@@ -13,7 +13,6 @@ export const MODELS_MAP = {
   'Dream Shaper V6': 'b7aa9939-abed-4d4e-96c4-140b8c65dd92',
   'Dream Shaper V5': 'd2fb9cf9-7999-4ae5-8bfe-f0df2d32abf8',
   'Leonardo Diffusion': 'b820ea11-02bf-4652-97ae-9ac0cc00593d',
-  'Leonardo Select': 'cd2b2a15-9760-4174-a5ff-4d2925057376',
   'Absolute Reality 1.6': 'e316348f-7773-490e-adcd-46757c738eb7',
 };
 

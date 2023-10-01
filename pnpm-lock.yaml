@@ -1,12 +1,16 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@hookform/resolvers':
     specifier: ^3.3.0
     version: 3.3.0(react-hook-form@7.45.4)
   '@leonardo-ai/sdk':
-    specifier: ^1.51.0
-    version: 1.51.0
+    specifier: ^1.56.0
+    version: 1.56.0
   '@radix-ui/react-checkbox':
     specifier: ^1.0.4
     version: 1.0.4(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)
@@ -169,8 +173,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: false
 
-  /@leonardo-ai/sdk@1.51.0:
-    resolution: {integrity: sha512-QAKrwsSL9uSzKSmJLsP39l+28DgexHW7H2FcZfQQuhwkLXbvt55ZHAWrO+2eu7LzyFWYznYZiRVZeAmSICx72w==}
+  /@leonardo-ai/sdk@1.56.0:
+    resolution: {integrity: sha512-p5FJRCnNjMGFYUDVSpUHUMyaWOohFTwVxySXlTMOrCayJ/g0eZc1F3so4xxYuKuN6v2FIqppq30rGf8eBotiAg==}
     dependencies:
       axios: 1.4.0
       class-transformer: 0.5.1

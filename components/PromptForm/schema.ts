@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from 'zod';
 
 export const formSchema = z.object({
   prompt: z.string().nonempty({
@@ -12,4 +12,7 @@ export const formSchema = z.object({
   width: z.coerce.number().min(32).max(1024),
   height: z.coerce.number().min(32).max(1024),
   promptMagic: z.boolean().optional(),
+  alchemy: z.boolean().optional(),
+  photoReal: z.boolean().optional(),
+  presetStyle: z.string(),
 });

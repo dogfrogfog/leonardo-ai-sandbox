@@ -1,11 +1,11 @@
-"use client";
-import { useGenerationContext } from "@/components/GenerationContext";
-import { MAX_RETRIES, MODELS_MAP, RETRY_DELAY } from "@/consts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+'use client';
+import { useGenerationContext } from '@/components/GenerationContext';
+import { MAX_RETRIES, MODELS_MAP, PRESET_STYLES, RETRY_DELAY } from '@/consts';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,9 +14,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -25,10 +25,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
-import { formSchema } from "./schema";
+import { formSchema } from './schema';
 
 let RETRIES_COUNT = 0;
 
@@ -43,34 +43,33 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema as any),
     defaultValues: {
-      prompt: "",
-      modelId: MODELS_MAP["3D Animation Style"],
+      prompt: '',
+      modelId: MODELS_MAP['3D Animation Style'],
       guidanceScale: 7,
       height: 512,
       width: 512,
-      negativePrompt: "",
+      negativePrompt: '',
       promptMagic: false,
     },
   });
 
   async function checkStatusAndRetry(generationId: string) {
-    console.log("generationId: ", generationId);
     if (RETRIES_COUNT < MAX_RETRIES) {
       const result = await getGeneration(generationId);
 
-      if (result.status === "COMPLETE") {
-        console.log("Status is COMPLETE:", result);
+      if (result.status === 'COMPLETE') {
+        console.log('Status is COMPLETE:', result);
         setGeneration(result);
         RETRIES_COUNT = 0;
         setIsLoading(false);
       } else {
-        console.log("Status is PENDING:", result);
+        console.log('Status is PENDING:', result);
         setTimeout(() => checkStatusAndRetry(generationId), RETRY_DELAY);
 
         RETRIES_COUNT++;
       }
     } else {
-      console.log("RETRIES_COUNT reached");
+      console.log('RETRIES_COUNT reached');
 
       RETRIES_COUNT = 0;
       setIsLoading(false);
@@ -244,6 +243,78 @@ export default function PromptForm({ createGeneration, getGeneration }: Props) {
                 customizable unlike leonardo.ai app, where there are multiple
                 options to customize.
               </FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="alchemy"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex gap-4 items-center">
+                <FormLabel>Use Alchemy</FormLabel>
+                <FormControl>
+                  <Checkbox
+                    id="alchemy"
+                    className="!mt-0"
+                    disabled={isLoading}
+                    checked={field.value}
+                    onCheckedChange={(checked) => field.onChange(checked)}
+                  />
+                </FormControl>
+              </div>
+              <FormMessage />
+              <FormDescription>alchemy</FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="photoReal"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex gap-4 items-center">
+                <FormLabel>Use Photo Real</FormLabel>
+                <FormControl>
+                  <Checkbox
+                    id="photoReal"
+                    className="!mt-0"
+                    disabled={isLoading}
+                    checked={field.value}
+                    onCheckedChange={(checked) => field.onChange(checked)}
+                  />
+                </FormControl>
+              </div>
+              <FormMessage />
+              <FormDescription>photoReal</FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="presetStyle"
+          render={({ field, ...rest }) => (
+            <FormItem>
+              <FormLabel>Style</FormLabel>
+              <Select
+                disabled={isLoading}
+                {...field}
+                onValueChange={(v) => field.onChange(v)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a model" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Styles</SelectLabel>
+                    {Object.entries(PRESET_STYLES).map(([key, value]) => (
+                      <SelectItem key={value} value={value}>
+                        {key}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />
